@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "minemate",
+  "version": "${version}",
+  "name": "MineMate AI",
+  "description": "A single-player companion bot project for Minecraft Java 1.21.11.",
+  "authors": ["shukeurenae201-bit"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": { "main": ["io.minemate.MineMate"] },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
