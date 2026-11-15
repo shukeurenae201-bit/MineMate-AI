@@ -6,6 +6,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.phys.Vec3;
@@ -17,7 +18,6 @@ public final class MineMate implements ModInitializer {
     public void onInitialize() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
             dispatcher.register(Commands.literal("minemate")
-
                 .then(Commands.literal("status")
                     .executes(context -> {
                         context.getSource().sendSuccess(
@@ -27,20 +27,19 @@ public final class MineMate implements ModInitializer {
                         return Command.SINGLE_SUCCESS;
                     })
                 )
-
                 .then(Commands.literal("spawn")
                     .executes(context -> {
                         var source = context.getSource();
                         var level = source.getLevel();
 
-                        ArmorStand bot = EntityType.ARMOR_STAND.create(level);
+                        ArmorStand bot = EntityType.ARMOR_STAND.create(
+                            level,
+                            EntitySpawnReason.COMMAND
+                        );
 
-                        if (bot == null) {
-                            return 0;
-                        }
+                        if (bot == null) return 0;
 
                         Vec3 pos = source.getPosition();
-
                         bot.setPos(pos.x + 1.5, pos.y, pos.z);
                         bot.setCustomName(Component.literal("MineMate"));
                         bot.setCustomNameVisible(true);
@@ -59,4 +58,3 @@ public final class MineMate implements ModInitializer {
         );
     }
 }
-
