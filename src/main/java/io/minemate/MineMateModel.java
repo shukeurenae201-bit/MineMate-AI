@@ -90,8 +90,9 @@ public class MineMateModel extends EntityModel<LivingEntityRenderState> {
     public void setupAnim(LivingEntityRenderState state) {
         super.setupAnim(state);
 
-        head.xRot = state.xRot;
-        head.yRot = state.yRot;
+        // Keep the head facing forward
+        head.xRot = 0;
+        head.yRot = 0;
 
         float speed = state.walkAnimationSpeed;
         float position = state.walkAnimationPos;
@@ -103,4 +104,3 @@ public class MineMateModel extends EntityModel<LivingEntityRenderState> {
         leftLeg.xRot = Mth.cos(position * 0.6662f + Mth.PI) * 1.4f * speed;
     }
 }
-
