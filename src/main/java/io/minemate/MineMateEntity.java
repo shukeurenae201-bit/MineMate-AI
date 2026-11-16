@@ -8,6 +8,10 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
@@ -20,12 +24,24 @@ public class MineMateEntity extends PathfinderMob {
         super(entityType, level);
 
         this.goalSelector.addGoal(1, new FollowPlayerGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, true));
+
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(
+                2,
+                new NearestAttackableTargetGoal<>(
+                        this,
+                        Monster.class,
+                        true
+                )
+        );
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return PathfinderMob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.3);
+                .add(Attributes.MOVEMENT_SPEED, 0.3)
+                .add(Attributes.ATTACK_DAMAGE, 4.0);
     }
 
     private static class FollowPlayerGoal extends Goal {
@@ -41,12 +57,16 @@ public class MineMateEntity extends PathfinderMob {
         @Override
         public boolean canUse() {
             player = bot.level().getNearestPlayer(bot, 16.0);
-            return player != null && bot.distanceToSqr(player) > 9.0;
+
+            return bot.getTarget() == null
+                    && player != null
+                    && bot.distanceToSqr(player) > 9.0;
         }
 
         @Override
         public boolean canContinueToUse() {
-            return player != null
+            return bot.getTarget() == null
+                    && player != null
                     && player.isAlive()
                     && bot.distanceToSqr(player) > 9.0
                     && bot.distanceToSqr(player) < 256.0;
