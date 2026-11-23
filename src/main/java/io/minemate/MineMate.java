@@ -5,6 +5,7 @@ import com.mojang.brigadier.Command;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -67,7 +68,11 @@ public final class MineMate implements ModInitializer {
 
                         Vec3 pos = source.getPosition();
                         bot.setPos(pos.x + 1.5, pos.y, pos.z);
-                        bot.setCustomName(Component.literal("MineMate"));
+
+                        bot.setCustomName(
+                                Component.literal("✦ MineMate ✦")
+                                        .withStyle(ChatFormatting.LIGHT_PURPLE)
+                        );
                         bot.setCustomNameVisible(true);
 
                         level.addFreshEntity(bot);
