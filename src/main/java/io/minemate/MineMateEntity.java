@@ -1,4 +1,3 @@
-
 package io.minemate;
 
 import java.util.EnumSet;
@@ -13,15 +12,22 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.SimpleContainer;
 
 public class MineMateEntity extends PathfinderMob {
+
+    private final SimpleContainer inventory = new SimpleContainer(9);
 
     public MineMateEntity(
             EntityType<? extends MineMateEntity> entityType,
             Level level
     ) {
         super(entityType, level);
+
+        inventory.setItem(0, new ItemStack(Items.DIRT, 64));
 
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.addGoal(2, new FollowPlayerGoal(this));
@@ -35,6 +41,10 @@ public class MineMateEntity extends PathfinderMob {
                         true
                 )
         );
+    }
+
+    public SimpleContainer getInventory() {
+        return inventory;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
